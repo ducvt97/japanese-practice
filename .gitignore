@@ -1,0 +1,5 @@
+.vscode
+japanese-practice-web-ui/.vscode
+japanese-practice-web-api/.vscode
+japanese-practice-web-ui/node_modules
+japanese-practice-web-api/node_modules
