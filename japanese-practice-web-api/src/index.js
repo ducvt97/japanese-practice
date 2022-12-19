@@ -6,7 +6,7 @@ const cors = require('cors');
 
 // Initialize app
 const app = express();
-const port = 3000;
+const port = 9000;
 
 app.use(cors({origin: '*'}));
 app.use(express.urlencoded({ extended: false }));

@@ -1,4 +1,10 @@
 import * as React from 'react';
+import {
+    createBrowserRouter,
+    RouterProvider,
+} from "react-router-dom";
+import axios from 'axios';
+
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -23,10 +29,48 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import HomeIcon from '@mui/icons-material/Home';
 import TranslateIcon from '@mui/icons-material/Translate';
 import LooksOneIcon from '@mui/icons-material/LooksOne';
 import AbcIcon from '@mui/icons-material/Abc';
 
+import Home from './Components/Home/Home';
+import KanjiPractice from './Components/KanjiPractice/KanjiPractice';
+import NumberPractice from './Components/NumberPractice/NumberPractice';
+import VocabularyPractice from './Components/VocabularyPractice/VocabularyPractice';
+import Page404 from './Components/Page404/Page404';
+
+axios.defaults.baseURL = "http://localhost:9000";
+axios.defaults.validateStatus = (status) => {
+    return status >= 200 && status <= 403;
+}
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Home />,
+    },
+    {
+        path: "/kanji-practice/kanji-vsound",
+        element: <KanjiPractice />,
+    },
+    {
+        path: "/kanji-practice/vsound-kanji",
+        element: <KanjiPractice />,
+    },
+    {
+        path: "/number-practice",
+        element: <NumberPractice />,
+    },
+    {
+        path: "/vocabulary-practice/word-meaning",
+        element: <VocabularyPractice />,
+    },
+    {
+        path: "/vocabulary-practice/meaning-word",
+        element: <VocabularyPractice />,
+    },
+]);
 
 function Copyright(props) {
     return (
@@ -95,6 +139,12 @@ const MenuListItems = () => {
 
     return (<React.Fragment>
         <List component="nav" aria-label="main mailbox folders">
+            <ListItemButton href="/">
+                <ListItemIcon>
+                    <HomeIcon />
+                </ListItemIcon>
+                <ListItemText primary="Home" />
+            </ListItemButton>
             <ListItemButton onClick={() => setOpenKanji(!openKanji)}>
                 <ListItemIcon>
                     <TranslateIcon />
@@ -104,17 +154,17 @@ const MenuListItems = () => {
             </ListItemButton>
             <Collapse in={openKanji} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemButton sx={{ pl: 4 }} href="/kanji-practice/kanji-vsound">
                         <ListItemIcon></ListItemIcon>
                         <ListItemText primary="Kanji - Vietnamese" />
                     </ListItemButton>
-                    <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemButton sx={{ pl: 4 }} href="/kanji-practice/vsound-kanji">
                         <ListItemIcon></ListItemIcon>
                         <ListItemText primary="Vietnamese - Kanji" />
                     </ListItemButton>
                 </List>
             </Collapse>
-            <ListItemButton>
+            <ListItemButton href="/number-practice">
                 <ListItemIcon>
                     <LooksOneIcon />
                 </ListItemIcon>
@@ -129,11 +179,11 @@ const MenuListItems = () => {
             </ListItemButton>
             <Collapse in={openVocabulary} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemButton sx={{ pl: 4 }} href="/vocabulary-practice/word-meaning">
                         <ListItemIcon></ListItemIcon>
                         <ListItemText primary="Word - Meaning" />
                     </ListItemButton>
-                    <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemButton sx={{ pl: 4 }} href="/vocabulary-practice/meaning-word">
                         <ListItemIcon></ListItemIcon>
                         <ListItemText primary="Meaning - Word" />
                     </ListItemButton>
@@ -215,8 +265,12 @@ const App = () => {
                 }}
                 >
                 <Toolbar />
-                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                    <Grid container spacing={3}>
+                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 , display: 'flex', 'flex-direction': 'column' }}>
+                    <Grid container>
+                        <RouterProvider
+                            router={router}
+                            fallbackElement={<Page404 />}
+                        />
                     </Grid>
                     <Copyright sx={{ pt: 4 }} />
                 </Container>
