@@ -264,16 +264,16 @@ const App = () => {
                     overflow: 'auto',
                 }}
                 >
-                <Toolbar />
-                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 , display: 'flex', 'flex-direction': 'column' }}>
-                    <Grid container>
-                        <RouterProvider
-                            router={router}
-                            fallbackElement={<Page404 />}
-                        />
+                    <Toolbar />
+                    <Grid sx={{ mt: 4, mb: 4, pl: 2, pr: 2, display: 'flex', 'flex-direction': 'column' }}>
+                        <Grid container>
+                            <RouterProvider
+                                router={router}
+                                fallbackElement={<Page404 />}
+                            />
+                        </Grid>
+                        <Copyright sx={{ pt: 4 }} />
                     </Grid>
-                    <Copyright sx={{ pt: 4 }} />
-                </Container>
                 </Box>
             </Box>
             </ThemeProvider>
