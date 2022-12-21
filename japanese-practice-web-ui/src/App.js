@@ -74,10 +74,10 @@ const router = createBrowserRouter([
 
 function Copyright(props) {
     return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+        <Typography variant="body1" color="text.secondary" align="center" {...props} sx={{py: 2}}>
             {'Copyright © '}
             <Link color="inherit" href="https://mui.com/">
-                Your Website
+                JaPra
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
@@ -253,20 +253,22 @@ const App = () => {
                     <MenuListItems></MenuListItems>
                 </Drawer>
                 <Box
-                component="main"
-                sx={{
-                    backgroundColor: (theme) =>
-                    theme.palette.mode === 'light'
-                        ? theme.palette.grey[100]
-                        : theme.palette.grey[900],
-                    flexGrow: 1,
-                    height: '100vh',
-                    overflow: 'auto',
-                }}
+                    component="main"
+                    sx={{
+                        backgroundColor: (theme) =>
+                        theme.palette.mode === 'light'
+                            ? theme.palette.grey[100]
+                            : theme.palette.grey[900],
+                        display: 'flex',
+                        flexDirection: 'column',
+                        flexGrow: 1,
+                        height: '100vh',
+                        overflow: 'auto',
+                    }}
                 >
                     <Toolbar />
-                    <Grid sx={{ mt: 4, mb: 4, pl: 2, pr: 2, display: 'flex', 'flex-direction': 'column' }}>
-                        <Grid container>
+                    <Grid sx={{ mt: 4, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                        <Grid container sx={{ flexGrow: 1 }}>
                             <RouterProvider
                                 router={router}
                                 fallbackElement={<Page404 />}
@@ -276,7 +278,7 @@ const App = () => {
                     </Grid>
                 </Box>
             </Box>
-            </ThemeProvider>
+        </ThemeProvider>
     );
 };
 export default App;
