@@ -1,38 +1,75 @@
 
-import { useEffect, useState, useRef } from "react";
+import { useRef, useState } from "react";
 import KanjiServices from "../../Services/kanji-services";
 import CardShowcase from "./CardShowcase/CardShowcase.component";
 import Loading from "../common/Loading.component";
-import { Box, Button, Container, Grid, Stack } from "@mui/material";
+import { Button, Container, FormControlLabel, FormGroup, Grid, Stack, Switch } from "@mui/material";
 import SelectInput from "../common/SelectInput.component";
+import CONSTANTS from "../others/constants";
+import ConfirmDialog from "../common/Dialog/ConfirmDialog.component";
 
-const typeSelectItem = [{ value: 0, text: 'All' }, { value: 1, text: 'Level' }]
+const typeSelectItem = [{ value: CONSTANTS.TYPE_ALL, text: 'All' }, { value: CONSTANTS.TYPE_LEVEL, text: 'Level' }]
+const levelSelectItem = [
+    { value: CONSTANTS.LEVEL_N5, text: 'N5' },
+    { value: CONSTANTS.LEVEL_N4, text: 'N4' },
+    { value: CONSTANTS.LEVEL_N3, text: 'N3' },
+    { value: CONSTANTS.LEVEL_N2, text: 'N2' },
+    { value: CONSTANTS.LEVEL_N1, text: 'N1' }
+]
 
 const KanjiPractice = () => {
+    const [inWritingMode, setInWritingMode] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [beginned, setBeginned] = useState(false);
     const [kanjis, setKanjis] = useState([]);
     const [typeSelect, setTypeSelect] = useState(typeSelectItem[0].value);
+    const [levelSelect, setLevelSelect] = useState(levelSelectItem[0].value);
+    const [open, setOpen] = useState(false);
 
-    const childRef = useRef();
-    useEffect(() => {
-        KanjiServices.getAll()
-            .then(res => {
-                setKanjis([...res.data.data]);
-                setLoading(false);
-            })
-            .catch(error => { KanjiServices.handleError(error); });
-    }, []);
+    const dialogConfirmSwitchModeRef = useRef();
 
-    const onPressReloadBtn = () => {
-        childRef.current.reload();
-    }
-    return ( <Container sx={{ width: '100%' }}>
-        <Stack>
-            <SelectInput label="Type of Practice" data={typeSelectItem} onChange={setTypeSelect} style={{width: 200}}></SelectInput>
-        </Stack>
-        {loading ? <Loading open={loading}></Loading>
-            : <><Button variant="outlined" onClick={onPressReloadBtn}>Reload</Button><CardShowcase data={kanjis} ref={childRef}></CardShowcase></>
+    const onPressBeginBtn = () => {
+        if (typeSelect === typeSelectItem[0].value) {
+            setLoading(true);
+            setBeginned(false);
+            KanjiServices.getAll()
+                .then(res => {
+                    setKanjis([...res.data.data]);
+                    setLoading(false);
+                    setBeginned(true);
+                })
+                .catch(error => { KanjiServices.handleError(error); });
+        } else if (typeSelect === typeSelectItem[1].value) {
+            // Will impl when data backend finished
         }
+    }
+
+    const onPressStopBtn = () => {
+        setBeginned(false);
+        setKanjis([]);
+    }
+
+    return ( <Container maxWidth="md">
+        <Stack spacing={3} sx={{ mb: 4 }}>
+            <FormGroup>
+                <FormControlLabel control={<Switch checked={inWritingMode} />} label="Vietnamese - Kanji Mode (often used for practicing writing)" />
+            </FormGroup>
+            {!beginned ? <Grid container spacing={2}>
+                    <Grid item xs={6}><SelectInput label="Type of Practice" data={typeSelectItem} defaultValue={typeSelectItem[0].value} onChange={setTypeSelect} style={{width: '100%'}}></SelectInput></Grid>
+                    {typeSelect === typeSelectItem[1].value && 
+                        <Grid item xs={6}><SelectInput label="Level" data={levelSelectItem} defaultValue={levelSelectItem[0].value} onChange={setLevelSelect} style={{width: '100%'}}></SelectInput></Grid>}
+                </Grid> : null
+            }
+            {beginned ? <Button variant="contained" size="large" onClick={onPressStopBtn}>Stop Practice</Button>
+                : <Button variant="contained" size="large" onClick={onPressBeginBtn}>Begin Practice</Button>
+            }
+        </Stack>
+        {beginned ?
+            loading ? <Loading open={loading}></Loading> : <CardShowcase data={kanjis}></CardShowcase>
+            : null
+        }
+        <Button variant="contained" size="large" onClick={() => dialogConfirmSwitchModeRef.current.triggerOpen()}>Open Dialog</Button>
+        <ConfirmDialog title="Change Mode?" content="This action will stop your current practice. Do you still want to proceed" ref={dialogConfirmSwitchModeRef}></ConfirmDialog>
     </Container> );
 }
 

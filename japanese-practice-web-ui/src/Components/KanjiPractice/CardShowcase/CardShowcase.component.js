@@ -2,8 +2,9 @@ import { Button, Container, Stack } from "@mui/material";
 import { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import Loading from "../../common/Loading.component";
 import ExpandCard from "../ExpandCard/ExpandCard";
+import CONSTANTS from "../../others/constants";
 
-const CardShowcase = ({data}, ref) => {
+const CardShowcase = ({data, mode}, ref) => {
     const [loading, setLoading] = useState(true);
     const [list, setList] = useState([]);
     const [listPrevious, setListPrevious] = useState([]);
@@ -52,12 +53,21 @@ const CardShowcase = ({data}, ref) => {
         </Container>
         <Container maxWidth="xs" disableGutters>
             {loading ? <Loading open={loading}></Loading>
-                : data.length > 0
-                ? <ExpandCard data={{
-                    mainContent: listPrevious[currentIndex].kanji,
-                    mainCollapse: listPrevious[currentIndex].vnSound,
-                    subCollapse: listPrevious[currentIndex].meaning
-                }}></ExpandCard> : 'No data found'
+                : data.length > 0 ? 
+                    mode === CONSTANTS.MODE_READING ?
+                        <ExpandCard data={{
+                            mainContent: listPrevious[currentIndex].kanji,
+                            mainCollapse: listPrevious[currentIndex].vnSound,
+                            subCollapse: listPrevious[currentIndex].meaning
+                        }}></ExpandCard>
+                        : mode === CONSTANTS.MODE_WRITING ? 
+                            <ExpandCard data={{
+                                mainContent: listPrevious[currentIndex].vnSound,
+                                subContent: listPrevious[currentIndex].meaning,
+                                mainCollapse: listPrevious[currentIndex].kanji,
+                            }}></ExpandCard>
+                            : null
+                    : 'No data found'
             }
         </Container>
     </Container>);

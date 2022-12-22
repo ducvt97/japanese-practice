@@ -22,7 +22,7 @@ import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
-import { Collapse } from '@mui/material';
+import { Collapse, Tooltip } from '@mui/material';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -30,7 +30,9 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import HomeIcon from '@mui/icons-material/Home';
+import GTranslateIcon from '@mui/icons-material/GTranslate';
 import TranslateIcon from '@mui/icons-material/Translate';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
 import LooksOneIcon from '@mui/icons-material/LooksOne';
 import AbcIcon from '@mui/icons-material/Abc';
 
@@ -147,21 +149,25 @@ const MenuListItems = () => {
             </ListItemButton>
             <ListItemButton onClick={() => setOpenKanji(!openKanji)}>
                 <ListItemIcon>
-                    <TranslateIcon />
+                    <GTranslateIcon />
                 </ListItemIcon>
                 <ListItemText primary="Kanji Practice" />
                 {openKanji ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
             <Collapse in={openKanji} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }} href="/kanji-practice/kanji-vsound">
-                        <ListItemIcon></ListItemIcon>
-                        <ListItemText primary="Kanji - Vietnamese" />
-                    </ListItemButton>
-                    <ListItemButton sx={{ pl: 4 }} href="/kanji-practice/vsound-kanji">
-                        <ListItemIcon></ListItemIcon>
-                        <ListItemText primary="Vietnamese - Kanji" />
-                    </ListItemButton>
+                    <Tooltip title="This often used for reading" placement="right">
+                        <ListItemButton sx={{ pl: 4 }} href="/kanji-practice/kanji-vsound">
+                            <ListItemIcon><TranslateIcon /></ListItemIcon>
+                            <ListItemText primary="Kanji - Vietnamese" />
+                        </ListItemButton>
+                    </Tooltip>
+                    <Tooltip title="This often used for writing" placement="right">
+                        <ListItemButton sx={{ pl: 4 }} href="/kanji-practice/vsound-kanji">
+                            <ListItemIcon><BorderColorIcon /></ListItemIcon>
+                            <ListItemText primary="Vietnamese - Kanji" />
+                        </ListItemButton>
+                    </Tooltip>
                 </List>
             </Collapse>
             <ListItemButton href="/number-practice">
@@ -281,4 +287,5 @@ const App = () => {
         </ThemeProvider>
     );
 };
+
 export default App;
