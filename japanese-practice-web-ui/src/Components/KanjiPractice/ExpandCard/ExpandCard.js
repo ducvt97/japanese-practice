@@ -1,8 +1,17 @@
 import { Button, Card, CardActions, CardContent, Collapse, Typography } from "@mui/material";
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 
-const ExpandCard = ({data: {mainContent, subContent, mainCollapse, subCollapse}}) => {
+const ExpandCard = ({data: {mainContent, subContent, mainCollapse, subCollapse}}, ref) => {
     const [expanded, setExpanded] = useState(false);
+
+    useImperativeHandle(ref, () => ({
+        triggerExpand() {
+            setExpanded(true);
+        },
+        triggerCollapse() {
+            setExpanded(false);
+        }
+    }));
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -27,4 +36,4 @@ const ExpandCard = ({data: {mainContent, subContent, mainCollapse, subCollapse}}
     </Card> );
 }
 
-export default ExpandCard;
+export default forwardRef(ExpandCard);

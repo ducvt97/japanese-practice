@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 // Connect to MongoDB
 try{
-    mongoose.connect('mongodb://localhost:27017/japra', {useNewUrlParser: true, useUnifiedTopology: true});
+    mongoose.connect('mongodb://127.0.0.1:27017/japra', {useNewUrlParser: true, useUnifiedTopology: true});
     console.log("connect success");
 }catch{
     console.log("error connect to db")
@@ -26,5 +26,5 @@ router.routes(app);
 
 // Log for app init
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+    console.log(`Example app listening at http://127.0.0.1:${port}`);
 })

@@ -30,9 +30,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import HomeIcon from '@mui/icons-material/Home';
-import GTranslateIcon from '@mui/icons-material/GTranslate';
 import TranslateIcon from '@mui/icons-material/Translate';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
 import LooksOneIcon from '@mui/icons-material/LooksOne';
 import AbcIcon from '@mui/icons-material/Abc';
 
@@ -42,7 +40,7 @@ import NumberPractice from './Components/NumberPractice/NumberPractice';
 import VocabularyPractice from './Components/VocabularyPractice/VocabularyPractice';
 import Page404 from './Components/Page404/Page404';
 
-axios.defaults.baseURL = "http://localhost:9000";
+axios.defaults.baseURL = "http://127.0.0.1:9000";
 axios.defaults.validateStatus = (status) => {
     return status >= 200 && status <= 403;
 }
@@ -53,11 +51,7 @@ const router = createBrowserRouter([
         element: <Home />,
     },
     {
-        path: "/kanji-practice/kanji-vsound",
-        element: <KanjiPractice />,
-    },
-    {
-        path: "/kanji-practice/vsound-kanji",
+        path: "/kanji-practice",
         element: <KanjiPractice />,
     },
     {
@@ -136,7 +130,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 const MenuListItems = () => {
-    const [openKanji, setOpenKanji] = React.useState(false);
     const [openVocabulary, setOpenVocabulary] = React.useState(false);
 
     return (<React.Fragment>
@@ -147,29 +140,12 @@ const MenuListItems = () => {
                 </ListItemIcon>
                 <ListItemText primary="Home" />
             </ListItemButton>
-            <ListItemButton onClick={() => setOpenKanji(!openKanji)}>
+            <ListItemButton href="/kanji-practice">
                 <ListItemIcon>
-                    <GTranslateIcon />
+                    <TranslateIcon />
                 </ListItemIcon>
                 <ListItemText primary="Kanji Practice" />
-                {openKanji ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
-            <Collapse in={openKanji} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                    <Tooltip title="This often used for reading" placement="right">
-                        <ListItemButton sx={{ pl: 4 }} href="/kanji-practice/kanji-vsound">
-                            <ListItemIcon><TranslateIcon /></ListItemIcon>
-                            <ListItemText primary="Kanji - Vietnamese" />
-                        </ListItemButton>
-                    </Tooltip>
-                    <Tooltip title="This often used for writing" placement="right">
-                        <ListItemButton sx={{ pl: 4 }} href="/kanji-practice/vsound-kanji">
-                            <ListItemIcon><BorderColorIcon /></ListItemIcon>
-                            <ListItemText primary="Vietnamese - Kanji" />
-                        </ListItemButton>
-                    </Tooltip>
-                </List>
-            </Collapse>
             <ListItemButton href="/number-practice">
                 <ListItemIcon>
                     <LooksOneIcon />

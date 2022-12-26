@@ -24,9 +24,10 @@ const KanjiPractice = () => {
     const [kanjis, setKanjis] = useState([]);
     const [typeSelect, setTypeSelect] = useState(typeSelectItem[0].value);
     const [levelSelect, setLevelSelect] = useState(levelSelectItem[0].value);
-    const [open, setOpen] = useState(false);
 
     const dialogConfirmSwitchModeRef = useRef();
+    const dialogStopRef = useRef();
+    const dialogCompleteRef = useRef();
 
     const onPressBeginBtn = () => {
         if (typeSelect === typeSelectItem[0].value) {
@@ -45,14 +46,35 @@ const KanjiPractice = () => {
     }
 
     const onPressStopBtn = () => {
+        if (beginned) {
+            dialogStopRef.current.triggerOpen();
+        } else {
+            setBeginned(false);
+        }
+    }
+
+    const onConfirmStop = () => {
         setBeginned(false);
         setKanjis([]);
+    }
+
+    const onSwitchMode = () => {
+        if (beginned) {
+            dialogConfirmSwitchModeRef.current.triggerOpen();
+        } else {
+            setInWritingMode(!inWritingMode);
+        }
+    }
+
+    const onConfirmSwitchMode = () => {
+        setBeginned(!beginned);
+        setInWritingMode(!inWritingMode);
     }
 
     return ( <Container maxWidth="md">
         <Stack spacing={3} sx={{ mb: 4 }}>
             <FormGroup>
-                <FormControlLabel control={<Switch checked={inWritingMode} />} label="Vietnamese - Kanji Mode (often used for practicing writing)" />
+                <FormControlLabel control={<Switch checked={inWritingMode} onChange={onSwitchMode} />} label="Vietnamese - Kanji Mode (often used for practicing writing)" />
             </FormGroup>
             {!beginned ? <Grid container spacing={2}>
                     <Grid item xs={6}><SelectInput label="Type of Practice" data={typeSelectItem} defaultValue={typeSelectItem[0].value} onChange={setTypeSelect} style={{width: '100%'}}></SelectInput></Grid>
@@ -65,11 +87,15 @@ const KanjiPractice = () => {
             }
         </Stack>
         {beginned ?
-            loading ? <Loading open={loading}></Loading> : <CardShowcase data={kanjis}></CardShowcase>
+            loading ? <Loading open={loading}></Loading>
+                : <CardShowcase data={kanjis} mode={inWritingMode ? CONSTANTS.MODE_WRITING : CONSTANTS.MODE_READING}></CardShowcase>
             : null
         }
-        <Button variant="contained" size="large" onClick={() => dialogConfirmSwitchModeRef.current.triggerOpen()}>Open Dialog</Button>
-        <ConfirmDialog title="Change Mode?" content="This action will stop your current practice. Do you still want to proceed" ref={dialogConfirmSwitchModeRef}></ConfirmDialog>
+        <ConfirmDialog title="Change Mode?" content="This action will stop your current practice. Do you still want to proceed?"
+            onConfirm={onConfirmSwitchMode} ref={dialogConfirmSwitchModeRef}></ConfirmDialog>
+        <ConfirmDialog title="Stop Practice" content="This action will stop your current practice. Do you still want to proceed?"
+            onConfirm={onConfirmStop} ref={dialogStopRef}></ConfirmDialog>
+        <ConfirmDialog title="Congratulate!!!" content="You have complete your practice. You can practice this again or try another." ref={dialogCompleteRef}></ConfirmDialog>
     </Container> );
 }
 
