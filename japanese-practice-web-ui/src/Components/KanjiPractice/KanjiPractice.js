@@ -71,6 +71,11 @@ const KanjiPractice = () => {
         setInWritingMode(!inWritingMode);
     }
 
+    const onComplete = () => {
+        setBeginned(false);
+        dialogCompleteRef.current.triggerOpen();
+    }
+
     return ( <Container maxWidth="md">
         <Stack spacing={3} sx={{ mb: 4 }}>
             <FormGroup>
@@ -88,7 +93,7 @@ const KanjiPractice = () => {
         </Stack>
         {beginned ?
             loading ? <Loading open={loading}></Loading>
-                : <CardShowcase data={kanjis} mode={inWritingMode ? CONSTANTS.MODE_WRITING : CONSTANTS.MODE_READING}></CardShowcase>
+                : <CardShowcase data={kanjis} mode={inWritingMode ? CONSTANTS.MODE_WRITING : CONSTANTS.MODE_READING} onComplete={onComplete}></CardShowcase>
             : null
         }
         <ConfirmDialog title="Change Mode?" content="This action will stop your current practice. Do you still want to proceed?"

@@ -4,11 +4,12 @@ import Loading from "../../common/Loading.component";
 import ExpandCard from "../ExpandCard/ExpandCard";
 import CONSTANTS from "../../others/constants";
 
-const CardShowcase = ({data, mode}) => {
+const CardShowcase = ({data, mode, onComplete}) => {
     const [loading, setLoading] = useState(true);
     const [list, setList] = useState([]);
     const [listPrevious, setListPrevious] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(-1);
+    const [isComplete, setIsComplete] = useState(false);
 
     const cardRef = useRef();
 
@@ -22,6 +23,10 @@ const CardShowcase = ({data, mode}) => {
     }, []);
 
     const onPressNextBtn = () => {
+        if (currentIndex === list.length - 1) {
+            setIsComplete(true);
+        }
+
         if (currentIndex === listPrevious.length - 1) {
             const tempArr = [...list],
                 random = Math.floor(Math.random() * tempArr.length);
@@ -34,6 +39,12 @@ const CardShowcase = ({data, mode}) => {
 
     const onPressPreviousBtn = () => {
         cardRef.current.triggerCollapse();
+        setCurrentIndex(currentIndex - 1);
+    }
+
+    const onPressCompleteBtn = () => {
+        setIsComplete(false);
+        onComplete();
         setCurrentIndex(currentIndex - 1);
     }
 
@@ -62,6 +73,7 @@ const CardShowcase = ({data, mode}) => {
                             : null
                     : 'No data found'
             }
+            {isComplete && <Button variant="contained" fullWidth onClick={onPressCompleteBtn} sx={{mt: 3}}>Complete Practicing</Button>}
         </Container>
     </Container>);
 };
