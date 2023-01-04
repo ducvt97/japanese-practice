@@ -23,7 +23,8 @@ const CardShowcase = ({data, mode, onComplete}) => {
     }, []);
 
     const onPressNextBtn = () => {
-        if (currentIndex === list.length - 1) {
+        console.log(currentIndex);
+        if (currentIndex === data.length - 2) {
             setIsComplete(true);
         }
 
@@ -38,6 +39,9 @@ const CardShowcase = ({data, mode, onComplete}) => {
     }
 
     const onPressPreviousBtn = () => {
+        if (isComplete) {
+            setIsComplete(false);
+        }
         cardRef.current.triggerCollapse();
         setCurrentIndex(currentIndex - 1);
     }
@@ -52,7 +56,7 @@ const CardShowcase = ({data, mode, onComplete}) => {
         <Container maxWidth="xs" disableGutters sx={{mb: 3}}>
             <Stack spacing={2} direction="row">
                 <Button variant="outlined" disabled={currentIndex <= 0} onClick={onPressPreviousBtn}>Previous</Button>
-                <Button variant="contained" disabled={list.length === 0} onClick={onPressNextBtn}>Next</Button>
+                <Button variant="contained" disabled={list.length === 0 && isComplete} onClick={onPressNextBtn}>Next</Button>
             </Stack>
         </Container>
         <Container maxWidth="xs" disableGutters>
