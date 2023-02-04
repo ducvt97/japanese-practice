@@ -22,7 +22,7 @@ const ExpandCard = ({data: {mainContent, subContent, mainCollapse, subCollapse}}
             <Typography gutterBottom variant="h1" component="div" textAlign="center" sx={{mb: 1}}>
                 {mainContent || 'null'}
             </Typography>
-            {subContent ? <Typography paragraph>{subContent}</Typography> : null}
+            {subContent ? <Typography variant="h5" component="div" textAlign="center">{subContent}</Typography> : null}
         </CardContent>
         <CardActions disableSpacing>
             <Button size="medium" onClick={handleExpandClick}>{expanded ? 'Hide Result' : 'Show Result'}</Button>

@@ -34,7 +34,7 @@ const ConfirmDialog = ({title, content, onConfirm, openByDefault}, ref) => {
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleConfirm} autoFocus>OK</Button>
+                <Button onClick={handleConfirm} variant="contained">OK</Button>
             </DialogActions>
         </Dialog>
     );
